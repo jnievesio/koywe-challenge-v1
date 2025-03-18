@@ -1,0 +1,48 @@
+services:
+    db_koywe_challenge:
+        image: postgres:17
+        ports:
+            - "5432:5432"
+        env_file: ".env"
+        environment:
+            - POSTGRES_DB=${DATABASE_NAME}
+            - POSTGRES_USER=${DATABASE_USERNAME}
+            - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+        networks:
+            - network_koywe_challenge
+        volumes:
+            - db_data:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U root -h db_koywe_challenge -p 5432"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+    api_koywe_challenge:
+        build:
+            context: .
+            dockerfile: Dockerfile.dev
+        ports:
+            - "3000:3000"
+        env_file: ".env"
+        environment:
+            - DATABASE_TYPE=${DATABASE_TYPE}
+            - DATABASE_HOST=db_koywe_challenge
+            - DATABASE_NAME=${DATABASE_NAME}
+            - DATABASE_USERNAME=${DATABASE_USERNAME}
+            - DATABASE_PORT=${DATABASE_PORT}
+            - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+            - PORT=${PORT}
+        networks:
+            - network_koywe_challenge
+        depends_on:
+            db_koywe_challenge:
+                condition: service_healthy
+        volumes:
+            - .:/app
+
+volumes:
+    db_data: {}
+
+networks:
+    network_koywe_challenge:
+        driver: bridge
