@@ -37,6 +37,8 @@ export class Users1742246963268 implements MigrationInterface {
             name: 'updatedAt',
             type: 'timestamp',
             isNullable: true,
+            default: 'CURRENT_TIMESTAMP',
+            onUpdate: 'CURRENT_TIMESTAMP',
           },
           {
             name: 'deletedAt',

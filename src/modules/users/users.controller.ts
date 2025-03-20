@@ -16,7 +16,7 @@ import { UsersService } from './users.service';
 import * as ResponseMessage from './response.messages';
 import { API_RESPONSES } from '../../shared/constants';
 
-@ApiTags('Users')
+@ApiTags('Usuarios')
 @Controller('users')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}

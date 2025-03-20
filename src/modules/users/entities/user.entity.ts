@@ -26,7 +26,9 @@ export class User {
   createdAt: Date;
 
   @UpdateDateColumn({
+    type: 'timestamp',
     nullable: true,
+    default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date | null;
 
